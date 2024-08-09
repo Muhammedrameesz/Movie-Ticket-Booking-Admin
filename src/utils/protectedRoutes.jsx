@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, replace } from 'react-router-dom';
 import useAuthStore from '../authStore/authStore';
 
 const ProtectedRoute = ({ children, redirectPath ='/login' }) => {

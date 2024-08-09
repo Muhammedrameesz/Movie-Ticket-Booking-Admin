@@ -30,7 +30,7 @@ const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
-      await axios.post(`${baseUrl}/admins/logout`, {}, { withCredentials: true });
+      await axios.post(`${baseUrl}/admins/logout`, "", { withCredentials: true });
       set({ isAuth: false });
       const event = new Event("logout");
       window.dispatchEvent(event);
