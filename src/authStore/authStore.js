@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import verifyAdmin from "../utils/verifyAdmin";
 import Cookies from "js-cookie";
+import { baseUrl } from "../basicurl/baseurl";
+import axios from "axios";
 
 const useAuthStore = create((set) => ({
   isAuth: false,
@@ -27,10 +29,9 @@ const useAuthStore = create((set) => ({
   },
 
   logout: async() => {
+    await axios.post(`${baseUrl}/admins/logout`, {}, { withCredentials: true });
    Cookies.remove("adminToken", { path: '/', domain: 'movie-ticket-booking-server.onrender.com' });
-
     set({ isAuth: false });
-    
     const event = new Event("logout");
     window.dispatchEvent(event);
   },
