@@ -30,11 +30,7 @@ const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
-      console.log("Attempting to remove adminToken cookie...");
-      const cookies = new Cookies();
-      cookies.remove("adminToken");
-
-      console.log("Cookie removal attempted.");
+      await axios.post(`${baseUrl}/admins/logout`, {}, { withCredentials: true });
       set({ isAuth: false });
       const event = new Event("logout");
       window.dispatchEvent(event);
@@ -42,6 +38,7 @@ const useAuthStore = create((set) => ({
       console.error("Logout failed:", error);
     }
   },
+  
 
   checkAuth: async () => {
     try {
