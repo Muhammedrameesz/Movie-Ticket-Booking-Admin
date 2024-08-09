@@ -30,7 +30,12 @@ const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
-      Cookies.remove("adminToken", { path: '/', domain: 'movie-ticket-booking-server.onrender.com' });
+      console.log("Attempting to remove adminToken cookie...");
+      Cookies.remove("adminToken", {
+        path: '/',
+        domain: 'movie-ticket-booking-server.onrender.com'
+      });
+      console.log("Cookie removal attempted.");
       set({ isAuth: false });
       const event = new Event("logout");
       window.dispatchEvent(event);
@@ -38,6 +43,7 @@ const useAuthStore = create((set) => ({
       console.error("Logout failed:", error);
     }
   },
+  
   
   
 

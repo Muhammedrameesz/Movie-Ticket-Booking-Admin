@@ -327,7 +327,7 @@ export default function AdminDashBoard() {
                   plugins: {
                     title: {
                       display: true,
-                      text: "Monthly Tickets Sold-",
+                      text: "Monthly Tickets Sold",
                       font: {
                         size: 20,
                       },
@@ -395,7 +395,7 @@ export default function AdminDashBoard() {
             </Box>
           </Stack>
         </Stack>
-       <h1>Fooooooo</h1>
+      
 
       </Box>
       <footer>
