@@ -26,10 +26,11 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  logout: () => {
-    Cookies.remove("adminToken");
+  logout: async() => {
+   Cookies.remove("adminToken", { path: '/', domain: 'movie-ticket-booking-server.onrender.com' });
+
     set({ isAuth: false });
-    // Dispatch custom event
+    
     const event = new Event("logout");
     window.dispatchEvent(event);
   },
