@@ -30,7 +30,6 @@ const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
-      await axios.post(`${baseUrl}/admins/logout`, {}, { withCredentials: true });
       Cookies.remove("adminToken", { path: '/', domain: 'movie-ticket-booking-server.onrender.com' });
       set({ isAuth: false });
       const event = new Event("logout");
@@ -39,6 +38,7 @@ const useAuthStore = create((set) => ({
       console.error("Logout failed:", error);
     }
   },
+  
   
 
   checkAuth: async () => {
