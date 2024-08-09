@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import verifyAdmin from "../utils/verifyAdmin";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 import { baseUrl } from "../basicurl/baseurl";
 import axios from "axios";
 
 const useAuthStore = create((set) => ({
   isAuth: false,
   loading: true,
-
+  
   login: async () => {
     try {
       await verifyAdmin();
@@ -31,10 +31,8 @@ const useAuthStore = create((set) => ({
   logout: async () => {
     try {
       console.log("Attempting to remove adminToken cookie...");
-      Cookies.remove("adminToken", {
-        path: '/',
-        domain: 'movie-ticket-booking-server.onrender.com'
-      });
+      const cookies = new Cookies();
+      cookies.remove('adminToken', { path: '/', domain: 'movie-ticket-booking-server.onrender.com' });
       console.log("Cookie removal attempted.");
       set({ isAuth: false });
       const event = new Event("logout");
