@@ -32,21 +32,9 @@ const useAuthStore = create((set) => ({
     try {
       console.log("Attempting to remove adminToken cookie...");
       const cookies = new Cookies();
-      cookies.remove("adminToken", {
-        path: "/",
-        domain: "movie-ticket-booking-server.onrender.com",
-      });
-      console.log("Cookie removal attempted.");
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-          .replace(/^ +/, "")
-          .replace(
-            /=.*/,
-            "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=movie-ticket-booking-server.onrender.com"
-          );
-      });
-      console.log("Cookie removal attempted again.");
+      cookies.remove("adminToken");
 
+      console.log("Cookie removal attempted.");
       set({ isAuth: false });
       const event = new Event("logout");
       window.dispatchEvent(event);
