@@ -29,7 +29,7 @@ const style = {
   top: "60%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  maxWidth: { xs: "100%", md: "75%" }, 
+  maxWidth: { xs: "100%", md: "80%" }, 
   margin: "auto",
   borderRadius: "10px",
   padding: { xs: "10px", md: "20px" }, 
@@ -37,8 +37,8 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   borderRadius: 5,
-  overflowY: "auto", // Enable vertical scrolling if needed
-  maxHeight: "90vh", // Max height to avoid overflow beyond viewport
+  overflowY: "auto", 
+  maxHeight: "90vh", 
 };
 
 export default function EditModal({ item, onProductUpdate }) {
