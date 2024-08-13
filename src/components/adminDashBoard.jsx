@@ -139,17 +139,18 @@ export default function AdminDashBoard() {
   const typostyles = {
     color: mode === "dark" ? "#aaa1a1" : "#3b3939",
     fontWeight: "bold",
-    fontSize: {xs:'8px',md:'20px'},
+    fontSize: {xs:'8px',md:'16px'},
   };
 
   const BoxStyle = {
     width: "100%",
-    height: "100px",
+    height: { xs: "80px", sm: "85px" },
     backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
     textAlign: "center",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    padding: { xs: "8px", sm: "10px" },
   };
 
   return (
@@ -159,24 +160,24 @@ export default function AdminDashBoard() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: "100vh",
+          height: "auto",
           width: "90%",
           padding: "10px",
-          mt:3,
+          mt:1,
         }}
       > 
         <Stack
-          direction={"row"}
+           direction={{ xs: "column", sm: "row" }}
           width={"100%"}
           justifyContent="center"
           spacing={3}
-           sx={{  ml: { xs:13, md: 35 }}}
+           sx={{  ml: { xs:6, md: 35 }}}
           
         >
           {/* first */}
           <Stack
             direction={"column"}
-            width={"15%"}
+            width={{ xs: "100%", sm: "15%" }}
             spacing={1}
             alignItems="center"
            
@@ -204,7 +205,7 @@ export default function AdminDashBoard() {
           </Stack>
           <Stack
             direction={"column"}
-            width={"15%"}
+            width={{ xs: "100%", sm: "15%" }}
             spacing={1}
             alignItems="center"
           >
@@ -229,18 +230,16 @@ export default function AdminDashBoard() {
 
           <Box
             sx={{
-              justifyContent: "center",
-              alignItems: "center",
-              height: "35vh", 
+              height: { xs: "40vh", sm: "33vh" },
+              width: { xs: "100%", sm: "40%" },
               backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
               borderRadius: "10px",
               padding: "20px",
               color: mode === "dark" ? "#fff" : "#000",
               transition: "all 0.5s ease",
-              width: "40%",
-              mt: 2,
-              display: "flex", 
-              flexDirection: "column", 
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Box sx={{ width: "100%", height: "100%" }}>
@@ -286,116 +285,123 @@ export default function AdminDashBoard() {
               />
             </Box>
           </Box>
+
+          
         </Stack>
 
         <Stack
-          direction="row"
-          spacing={3}
-          mt={3}
-          mb={10}
-          width="80%" 
-          justifyContent="center" 
-          sx={{  ml: { xs: "auto", md: 35 }}}
-        >
-          <Stack
-            sx={{
-              width: "45%", 
-              backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
-
-              borderRadius: "10px",
-              padding: "20px",
-              color: mode === "dark" ? "#fff" : "#000",
-              transition: "all 0.5s ease",
-              height: "38vh",
-            }}
-          >
-            <Box sx={{ width: "100%", height: "100%" }}>
-              <Bar
-                data={{
-                  labels,
-                  datasets: [
-                    {
-                      label: "Tickets Sold",
-                      data: ticketSalesData,
-                      backgroundColor: chartColors.bar.backgroundColor,
-                      borderWidth: 0, 
-                      borderRadius: 5,
-                    },
-                  ],
-                }}
-                options={{
-                  plugins: {
-                    title: {
-                      display: true,
-                      text: "Monthly Tickets Sold",
-                      font: {
-                        size: 20,
-                      },
-                      color: mode === "dark" ? "#fff" : "#000", 
-                    },
-                  },
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                      },
-                    },
-                  },
-                }}
-              />
-            </Box>
-          </Stack>
-          <Stack
-            sx={{
-              width: "45%", 
-              backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
-
-              borderRadius: "10px",
-              padding: "20px",
-              color: mode === "dark" ? "#fff" : "#000",
-              transition: "all 0.5s ease",
-              height: "38vh",
-            }}
-          >
-            <Box sx={{ width: "100%", height: "100%" }}>
-              <Doughnut
-                data={{
-                  labels: ["Total", "Paid", "Pay Later"],
-                  datasets: [
-                    {
-                      label: "Payment Details",
-                      data: [
-                        totalPayments.total,
-                        totalPayments.paid,
-                        totalPayments.payLater,
-                      ],
-                      backgroundColor: chartColors.doughnut.backgroundColor,
-                      borderWidth: 0, 
-                      borderRadius: 5,
-                    },
-                  ],
-                }}
-                options={{
-                  plugins: {
-                    title: {
-                      display: true,
-                      text: "Payment Details",
-                      font: {
-                        size: 20,
-                      },
-                      color: mode === "dark" ? "#fff" : "#000", // Dynamic title color
-                    },
-                  },
-                }}
-              />
-            </Box>
-          </Stack>
-        </Stack>
+      direction={{ xs: "column", md: "row" }} 
+      spacing={3}
+      mt={3}
+      mb={10}
+      width="100%"
+      justifyContent="center"
+      sx={{ overflowX: "auto",ml: { xs:6, md: 35 } }} 
       
+    >
+      <Stack
+        sx={{
+          flex: 1,
+          maxWidth: { xs: "100%", md: "40%" },
+          backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
+          borderRadius: "10px",
+          padding: "20px",
+          color: mode === "dark" ? "#fff" : "#000",
+          transition: "all 0.5s ease",
+          height: { xs: "30vh", md: "35vh" }, // Responsive height
+        }}
+      >
+       
+        <Box sx={{ width: "100%", height: "100%" }}>
+          <Bar
+            data={{
+              labels,
+              datasets: [
+                {
+                  label: "Tickets Sold",
+                  data: ticketSalesData,
+                  backgroundColor: chartColors.bar.backgroundColor,
+                  borderWidth: 0,
+                  borderRadius: 5,
+                },
+              ],
+            }}
+            options={{
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Monthly Tickets Sold",
+                  font: {
+                    size: 20,
+                  },
+                  color: mode === "dark" ? "#fff" : "#000",
+                },
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                  },
+                },
+              },
+            }}
+          />
+        </Box>
+      </Stack>
+      <Stack
+        sx={{
+          flex: 1,
+          maxWidth: { xs: "100%", md: "40%" },
+          backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
+          borderRadius: "10px",
+          padding: "20px",
+          color: mode === "dark" ? "#fff" : "#000",
+          transition: "all 0.5s ease",
+          height: { xs: "30vh", md: "35vh" }, // Responsive height
+        }}
+      >
+      
+        <Box sx={{ width: "100%", height: "100%" }}>
+          <Doughnut
+            data={{
+              labels: ["Total", "Paid", "Pay Later"],
+              datasets: [
+                {
+                  label: "Payment Details",
+                  data: [
+                    totalPayments.total,
+                    totalPayments.paid,
+                    totalPayments.payLater,
+                  ],
+                  backgroundColor: chartColors.doughnut.backgroundColor,
+                  borderWidth: 0,
+                  borderRadius: 5,
+                },
+              ],
+            }}
+            options={{
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Payment Details",
+                  font: {
+                    size: 20,
+                  },
+                  color: mode === "dark" ? "#fff" : "#000",
+                },
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+            }}
+          />
+        </Box>
+      </Stack>
+    </Stack>
+
 
       </Box>
       <footer>
