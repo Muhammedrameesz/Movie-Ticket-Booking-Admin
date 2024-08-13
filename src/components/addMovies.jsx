@@ -119,13 +119,14 @@ export default function SampleApiHandler() {
         justifyContent="center"
         alignItems="center"
         sx={{
-          maxWidth: "75%",
+          maxWidth: { xs: "100%", md: "75%" }, 
           margin: "auto",
+          marginLeft: { xs: 0, md: "auto" }, 
           borderRadius: "10px",
-          padding: "20px",
+          padding: { xs: "10px", md: "20px" }, 
         }}
       >
-        <Grid container spacing={3} sx={{ ml: { xs: 1, md: 10 } }}>
+        <Grid container spacing={3} sx={{ ml: { xs: 0, md: 10 } }}>
           <Grid item xs={12}>
             {isLoading && (
               <Backdrop
@@ -152,7 +153,7 @@ export default function SampleApiHandler() {
                 direction="column"
                 sx={{
                   border: "1px solid #aeb6af",
-                  padding: "20px",
+                  padding: { xs: "10px", md: "20px" },
                   borderRadius: "10px",
                 }}
               >
