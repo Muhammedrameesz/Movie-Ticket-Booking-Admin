@@ -139,7 +139,7 @@ export default function AdminDashBoard() {
   const typostyles = {
     color: mode === "dark" ? "#aaa1a1" : "#3b3939",
     fontWeight: "bold",
-    fontSize: {xs:'8px',md:'16px'},
+    fontSize: {xs:'16px',md:'16px'},
   };
 
   const BoxStyle = {
@@ -163,7 +163,7 @@ export default function AdminDashBoard() {
           height: "auto",
           width: "90%",
           padding: "10px",
-          mt:1,
+          mt:3,
         }}
       > 
         <Stack
@@ -230,7 +230,7 @@ export default function AdminDashBoard() {
 
           <Box
             sx={{
-              height: { xs: "40vh", sm: "33vh" },
+              height: { xs: "30vh", sm: "35vh" },
               width: { xs: "100%", sm: "40%" },
               backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
               borderRadius: "10px",
