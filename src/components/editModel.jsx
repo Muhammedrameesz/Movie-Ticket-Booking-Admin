@@ -29,11 +29,13 @@ const style = {
   top: "60%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "60%", // Set the width to 80%
+  maxWidth: { xs: "100%", md: "75%" }, 
+  margin: "auto",
+  borderRadius: "10px",
+  padding: { xs: "10px", md: "20px" }, 
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
   borderRadius: 5,
   overflowY: "auto", // Enable vertical scrolling if needed
   maxHeight: "90vh", // Max height to avoid overflow beyond viewport
