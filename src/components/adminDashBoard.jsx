@@ -190,7 +190,10 @@ export default function AdminDashBoard() {
                 Total Revenue
               </Typography>
               <Typography  sx={typostyles}>
-                <CurrencyRupeeIcon />
+                <CurrencyRupeeIcon sx={{
+                  fontSize: { xs: "14px", md: "20px" },
+                  color: mode === "dark"? "#f2f2f2" : "#3b3939",
+                }}/>
                 {totalPayments.total}
               </Typography>
             </Box>
