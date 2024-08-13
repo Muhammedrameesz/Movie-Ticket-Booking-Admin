@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button, Typography, Container, Box } from "@mui/material";
+import { TextField, Button, Typography, Container, Box, CircularProgress } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
@@ -11,6 +11,7 @@ import MovieImage from "../images/Movies.png"
 import { Stack } from "@mui/system";
 import { baseUrl } from "../basicurl/baseurl";
 import useAuthStore from "../authStore/authStore";
+import { useState } from "react";
 
 const styles = {
   color: "blue",
@@ -34,7 +35,11 @@ export default function login() {
   } = useForm({ resolver: yupResolver(schema) });
   const navigate = useNavigate();
   const { mode } = useTheme();
+  const [loading,setLoading]=useState(false)
+
+
   const onSave = async (data) => {
+    setLoading(true)
     try {
       const result = await axios.post(`${baseUrl}/admins/login`, 
       data,
@@ -46,9 +51,13 @@ export default function login() {
             throw new Error(result.data.message);
         }
         await login()
-        toast.success("Successfully logged in");
+        setTimeout(()=>{
+          setLoading(false)
+          toast.success("Successfully logged in");
           navigate('/admin/dashboard');
           reset();
+        },2000)
+        
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || 'Something went wrong');
@@ -62,10 +71,9 @@ export default function login() {
            sx={{
             display: 'flex',
             flexDirection: 'column',
-            // alignItems: 'center',
             mt: 12,
             mb:8,
-            maxWidth: '80%',
+            maxWidth: { xs: "100%", md: "80%" },
             border: mode === "dark" ? '1px solid #fff' : '1px solid #000',
             borderRadius: '10px',
             padding: '20px',
@@ -73,8 +81,6 @@ export default function login() {
             boxShadow: mode === "dark" 
             ? 'rgba(255, 255, 255, 0.25) 0px 5px 5px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px' 
             : 'rgba(0, 0, 0, 0.25) 0px 5px 5px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px',
-            // backgroundImage:mode==="dark"?"url(https://img.freepik.com/free-photo/cinematography-symbols-black-background_23-2147698946.jpg?t=st=1721547817~exp=1721551417~hmac=243047804eb986da2d7a68968410f87b51e65de619b9a7bbd32ba81e66acd0f8&w=740)":
-            // "url(https://img.freepik.com/free-photo/spilled-popcorn-near-opened-clapperboard_23-2147698870.jpg?t=st=1721548304~exp=1721551904~hmac=d646b1a614d7a9413e54c6f728c282c8bd458fe461e330eb29a6fbe52cf4186d&w=740)",
             backgroundColor:mode==="light"&& "#f5f2f2",
             objectFit:'cover',
             backgroundRepeat:'no-repeat',
@@ -150,10 +156,23 @@ export default function login() {
                   fontSize: 14,
                   cursor: 'pointer',
                   textDecoration: 'none',
-                  
+                  "&:hover": {
+                    backgroundColor: mode === "dark" ? "#439e27" : "#f02c2c",
+                    color: mode === "dark" ? "white" : "black",
+                  },                 
                  }}
             >
-              Login
+               {loading ? (
+                <CircularProgress
+                  size={20}
+                  sx={{
+                    color: mode === "dark" ? "#c7bebe" : "#1a1919",
+                  }}
+                />
+              ) : (
+                "Login"
+              )}
+             
             </Button>
           </Box>
         </Box>
