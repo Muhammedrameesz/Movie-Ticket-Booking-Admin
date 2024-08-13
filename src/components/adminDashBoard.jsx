@@ -144,7 +144,7 @@ export default function AdminDashBoard() {
 
   const BoxStyle = {
     width: "100%",
-    height: { xs: "80px", sm: "90px" },
+    height: { xs: "80px", sm: "100px" },
     backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
     textAlign: "center",
     display: "flex",
@@ -308,7 +308,7 @@ export default function AdminDashBoard() {
           padding: "20px",
           color: mode === "dark" ? "#fff" : "#000",
           transition: "all 0.5s ease",
-          height: { xs: "30vh", md: "37vh" }, // Responsive height
+          height: { xs: "30vh", md: "37vh" }, 
         }}
       >
        
@@ -361,7 +361,7 @@ export default function AdminDashBoard() {
           padding: "20px",
           color: mode === "dark" ? "#fff" : "#000",
           transition: "all 0.5s ease",
-          height: { xs: "30vh", md: "37vh" }, // Responsive height
+          height: { xs: "30vh", md: "37vh" }, 
         }}
       >
       
