@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import verifyAdmin from "../utils/verifyAdmin";
-import Cookies from "universal-cookie";
 import { baseUrl } from "../basicurl/baseurl";
 import axios from "axios";
 
