@@ -192,7 +192,6 @@ export default function AdminDashBoard() {
               <Typography  sx={{...typostyles,color:'green'}}>
                 <CurrencyRupeeIcon sx={{
                   fontSize: { xs: "14px", md: "20px" },
-                  color: mode === "dark"? "#f2f2f2" : "#3b3939",
                 }}/>
                 {totalPayments.total}
               </Typography>

@@ -183,9 +183,9 @@ export default function MyTheatersAndBooking() {
   const typostyles = {
     color: mode === "dark" ? "#aaa1a1" : "#3b3939",
     fontWeight: "bold",
-    fontSize: { xs: "16px", sm: "12px", md: "14px" },
+    fontSize: { xs: "16px", sm: "14px", md: "14px" },
     backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
-    padding: { xs: "10px", sm: "7px", md: "6px" },
+    padding: { xs: "10px", sm: "7px", md: "7px" },
     borderRadius: "5px",
   };
 
