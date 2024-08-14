@@ -189,7 +189,7 @@ export default function AdminDashBoard() {
               >
                 Total Revenue
               </Typography>
-              <Typography  sx={typostyles}>
+              <Typography  sx={{...typostyles,color:'green'}}>
                 <CurrencyRupeeIcon sx={{
                   fontSize: { xs: "14px", md: "20px" },
                   color: mode === "dark"? "#f2f2f2" : "#3b3939",
@@ -201,7 +201,7 @@ export default function AdminDashBoard() {
               <Typography  sx={typostyles}>
                 Total Reservations
               </Typography>
-              <Typography  sx={typostyles}>
+              <Typography  sx={{...typostyles,color:'green'}}>
                 {totalReservation.total}
               </Typography>
             </Box>
@@ -216,7 +216,7 @@ export default function AdminDashBoard() {
               <Typography  sx={typostyles}>
                 Total Bookings
               </Typography>
-              <Typography  sx={typostyles}>
+              <Typography sx={{...typostyles,color:'green'}}>
                 {bookings.length}
               </Typography>
             </Box>
@@ -224,7 +224,7 @@ export default function AdminDashBoard() {
               <Typography  sx={typostyles}>
                 Total Theaters
               </Typography>
-              <Typography  sx={typostyles}>
+              <Typography  sx={{...typostyles,color:'green'}}>
                 {totalUniqueTheaters}
               </Typography>
             </Box>
