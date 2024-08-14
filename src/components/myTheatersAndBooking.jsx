@@ -250,9 +250,14 @@ export default function MyTheatersAndBooking() {
             spacing={3}
             mt={3}
             mb={1}
+            display={'flex'}
             width="85%"
             justifyContent="center"
-            sx={{ ml: { xs: "auto", md: 40 } }}
+            sx={{
+              ml: { xs: "auto", md: 40 },
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: "center",
+            }}
           >
             <Stack
               sx={{
@@ -576,7 +581,7 @@ export default function MyTheatersAndBooking() {
             direction={"row"}
             width={"90%"}
             justifyContent="center"
-            spacing={2}
+            spacing={0}
             sx={{
               ml: { xs: "auto", md: 40 },
               width: "100%",
