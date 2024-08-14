@@ -9,22 +9,24 @@ import {
   Paper,
   Stack,
   Typography,
-  Grid,
-  useMediaQuery
+  Grid
 } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { baseUrl } from "../basicurl/baseurl";
 import { useTheme } from "../themes/themeContext";
 import notFoundDark from "../images/notFoundDark.jpg";
 import notFoundLight from "../images/59563746_9318707.jpg";
 import useGetBookings from "../hooks/useGetBookings";
 
 export default function BookingDetails() {
-  const { bookings } = useGetBookings();
+  const{bookings} = useGetBookings()
   const { mode } = useTheme();
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
+ 
 
   const headStyle = {
-    fontSize: isMobile ? "12px" : "14px",
+    fontSize: "14px",
     fontWeight: "bold",
     color: mode === "dark" ? "#81ca6f" : "#278310",
     padding: "10px",
@@ -32,7 +34,7 @@ export default function BookingDetails() {
   };
 
   const bodyStyle = {
-    fontSize: isMobile ? "10px" : "12px",
+    fontSize: "12px",
     padding: "10px",
     textAlign: "center",
     color: mode === "dark" ? "#bbb2b2" : "#3a3838",
@@ -44,18 +46,19 @@ export default function BookingDetails() {
       {bookings.length === 0 ? (
         <Stack spacing={4} alignItems="center">
           <Typography
-            variant={isMobile ? "body2" : "h6"}
+            variant="h6"
             color={mode === "dark" ? "#f82323" : "#bb0e0e"}
+
             textAlign="center"
             fontWeight="bold"
           >
-            There is a delay in loading the data....!
+             There is a  delay in loading the data....!
           </Typography>
           <img
             src={mode === "dark" ? notFoundDark : notFoundLight}
             alt="not found"
             style={{
-              maxWidth: "100%",
+              maxWidth: "30%",
               height: "auto",
               borderRadius: "20px",
             }}
@@ -64,38 +67,34 @@ export default function BookingDetails() {
       ) : (
         <Grid container justifyContent="center">
           <Typography sx={{
-            fontSize: isMobile ? "16px" : "20px",
+            fontSize: "20px",
             fontWeight: "bold",
             color: mode === "dark" ? "#9e6fca" : "#7430b4",
+            // padding: "10px",
             textAlign: "center",
-            textDecoration: "underline",
-            mt: 2
+            textDecoration:"underline",
+            mt:2
           }}>
-            Booking Details
+            Booking Detalis
           </Typography>
-          <Grid item xs={12} sm={12} md={10} sx={{ ml: { xs: 0, md: 27 }, mt: 3 }}>
+          <Grid item xs={12} sm={10} md={10} sx={{
+            ml:{xs:0,md:27},
+            mt:3
+            }} >
             <TableContainer component={Paper} sx={{ width: "100%", overflowX: "auto" }}>
-              <Table sx={{ minWidth: 650, fontSize: "12px" }}>
+              <Table sx={{ fontSize: "12px" }}>
                 <TableHead>
                   <TableRow>
                     <TableCell align="center" sx={headStyle}>User Email</TableCell>
                     <TableCell align="center" sx={headStyle}>Movie Name</TableCell>
                     <TableCell align="center" sx={headStyle}>Theater Name</TableCell>
-                    {!isMobile && (
-                      <>
-                        <TableCell align="center" sx={headStyle}>Seat Numbers</TableCell>
-                        <TableCell align="center" sx={headStyle}>Date</TableCell>
-                        <TableCell align="center" sx={headStyle}>Time</TableCell>
-                      </>
-                    )}
+                    <TableCell align="center" sx={headStyle}>Seat Numbers</TableCell>
+                    <TableCell align="center" sx={headStyle}>Date</TableCell>
+                    <TableCell align="center" sx={headStyle}>Time</TableCell>
                     <TableCell align="center" sx={headStyle}>Location</TableCell>
-                    {!isMobile && (
-                      <>
-                        <TableCell align="center" sx={headStyle}>Payment Status</TableCell>
-                        <TableCell align="center" sx={headStyle}>Amount</TableCell>
-                        <TableCell align="center" sx={headStyle}>Total Reservation</TableCell>
-                      </>
-                    )}
+                    <TableCell align="center" sx={headStyle}>Payment Status</TableCell>
+                    <TableCell align="center" sx={headStyle}>Amount</TableCell>
+                    <TableCell align="center" sx={headStyle}>Total Reservation</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -104,25 +103,17 @@ export default function BookingDetails() {
                       <TableCell align="center" sx={bodyStyle}>{booking.userEmail}</TableCell>
                       <TableCell align="center" sx={bodyStyle}>{booking.movieName}</TableCell>
                       <TableCell align="center" sx={bodyStyle}>{booking.theaterName}</TableCell>
-                      {!isMobile && (
-                        <>
-                          <TableCell align="center" sx={bodyStyle}>
-                            {booking.seatNumbers ? booking.seatNumbers.join(", ") : "N/A"}
-                          </TableCell>
-                          <TableCell align="center" sx={bodyStyle}>
-                            {new Date(booking.date).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell align="center" sx={bodyStyle}>{booking.time}</TableCell>
-                        </>
-                      )}
+                      <TableCell align="center" sx={bodyStyle}>
+                        {booking.seetNumbers.join(", ")}
+                      </TableCell>
+                      <TableCell align="center" sx={bodyStyle}>
+                        {new Date(booking.date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell align="center" sx={bodyStyle}>{booking.time}</TableCell>
                       <TableCell align="center" sx={bodyStyle}>{booking.location}</TableCell>
-                      {!isMobile && (
-                        <>
-                          <TableCell align="center" sx={bodyStyle}>{booking.paymentStatus}</TableCell>
-                          <TableCell align="center" sx={bodyStyle}>₹{booking.amount}</TableCell>
-                          <TableCell align="center" sx={bodyStyle}>{booking.totalReservation}</TableCell>
-                        </>
-                      )}
+                      <TableCell align="center" sx={bodyStyle}>{booking.paymentStatus}</TableCell>
+                      <TableCell align="center" sx={bodyStyle}>₹{booking.amount}</TableCell>
+                      <TableCell align="center" sx={bodyStyle}>{booking.totalReservation}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
