@@ -183,17 +183,22 @@ export default function MyTheatersAndBooking() {
   const typostyles = {
     color: mode === "dark" ? "#aaa1a1" : "#3b3939",
     fontWeight: "bold",
-    fontSize: { xs: "8px", md: "16px" },
+    fontSize: { xs: "10px", sm: "12px", md: "16px" },
+    backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
+   padding:{xs: "10px", sm: "5px", md: "5px"},
+    borderRadius: "5px",
+    
+  
   };
 
   const BoxStyle = {
     width: "100%",
-    height: "70px",
-    backgroundColor: mode === "dark" ? "#1d1b1b" : "#ebeaea",
+    height: { xs: "auto", sm: "85px" },
     textAlign: "center",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    padding: { xs: "8px", sm: "10px" },
   };
 
   return (
@@ -257,7 +262,6 @@ export default function MyTheatersAndBooking() {
                 padding: "20px",
                 color: mode === "dark" ? "#fff" : "#000",
                 transition: "all 0.5s ease",
-
               }}
             >
               <Box
@@ -275,7 +279,6 @@ export default function MyTheatersAndBooking() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                   
                   }}
                 >
                   <Line
@@ -313,7 +316,7 @@ export default function MyTheatersAndBooking() {
                       },
                       responsive: true,
                       maintainAspectRatio: false,
-                    
+
                       scales: {
                         x: {
                           beginAtZero: true,
@@ -347,7 +350,6 @@ export default function MyTheatersAndBooking() {
                     }}
                   />
                 </Box>
-              
 
                 {/* Bar Chart at the Bottom */}
                 <Box sx={{ flex: 2 }}>
@@ -527,8 +529,8 @@ export default function MyTheatersAndBooking() {
                     border: `1px dashed ${
                       mode === "dark" ? "#636363" : "#505050"
                     }`,
-                    backgroundColor: "transparent", 
-                   marginTop:'40px'
+                    backgroundColor: "transparent",
+                    marginTop: "40px",
                   }}
                 />
 
@@ -554,8 +556,7 @@ export default function MyTheatersAndBooking() {
                         title: {
                           display: true,
                           text: "Payment Details",
-                          
-                 
+
                           font: {
                             size: 18,
                           },
@@ -569,7 +570,6 @@ export default function MyTheatersAndBooking() {
                 </Box>
               </Stack>
             </Stack>
-            
           </Stack>
 
           <Stack
@@ -577,9 +577,14 @@ export default function MyTheatersAndBooking() {
             width={"90%"}
             justifyContent="center"
             spacing={2}
-            sx={{ ml: { xs: "auto", md: 40 } }}
+            sx={{
+              ml: { xs: "auto", md: 40 },
+              width: "100%",
+              flexDirection: { xs: "column", sm: "row" },
+              justifyContent: "center",
+              alignItems: { xs: "flex-start", sm: "center" },
+            }}
           >
-           
             <Box sx={BoxStyle}>
               <Typography variant="h6" sx={typostyles}>
                 Total Reservations
@@ -610,21 +615,25 @@ export default function MyTheatersAndBooking() {
                 Total Revenue
               </Typography>
               <Typography variant="h4" sx={typostyles}>
-                <CurrencyRupeeIcon sx={{
-                  fontSize:{xs:8,md:12}
-                }}/>
+                <CurrencyRupeeIcon
+                  sx={{
+                    fontSize: { xs: 8, md: 12 },
+                  }}
+                />
                 {totalPayments.total}
               </Typography>
             </Box>
             <Box sx={BoxStyle}>
               <Typography variant="h6" sx={typostyles}>
-              Amount Recieved
+                Amount Recieved
               </Typography>
               <Typography variant="h4" sx={typostyles}>
-              <CurrencyRupeeIcon sx={{
-                  fontSize:{xs:8,md:12}
-                }}/>
-              {totalPayments.paid}
+                <CurrencyRupeeIcon
+                  sx={{
+                    fontSize: { xs: 8, md: 12 },
+                  }}
+                />
+                {totalPayments.paid}
               </Typography>
             </Box>
             <Box sx={BoxStyle}>
@@ -632,9 +641,11 @@ export default function MyTheatersAndBooking() {
                 Amount Pending
               </Typography>
               <Typography variant="h4" sx={typostyles}>
-              <CurrencyRupeeIcon sx={{
-                  fontSize:{xs:8,md:12}
-                }}/>
+                <CurrencyRupeeIcon
+                  sx={{
+                    fontSize: { xs: 8, md: 12 },
+                  }}
+                />
                 {totalPayments.payLater}
               </Typography>
             </Box>
