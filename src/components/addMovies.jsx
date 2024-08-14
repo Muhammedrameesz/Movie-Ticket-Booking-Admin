@@ -121,7 +121,7 @@ export default function SampleApiHandler() {
         sx={{
           maxWidth: { xs: "100%", md: "75%" }, 
           margin: "auto",
-          marginLeft: { xs: 0, md: "auto" }, 
+          marginLeft: { xs: -1, md: "auto" }, 
           borderRadius: "10px",
           padding: { xs: "10px", md: "20px" }, 
         }}

@@ -29,7 +29,7 @@ const style = {
   top: "60%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  maxWidth: { xs: "100%", md: "80%" }, 
+  width: {xs:'80%',md:'60%'},  
   margin: "auto",
   borderRadius: "10px",
   padding: { xs: "10px", md: "20px" }, 
