@@ -75,7 +75,7 @@ export default function BookingDetails() {
           </Typography>
           <Grid item xs={12} sm={12} md={10} sx={{ ml: { xs: 0, md: 27 }, mt: 3 }}>
             <TableContainer component={Paper} sx={{ width: "100%", overflowX: "auto" }}>
-              <Table sx={{ fontSize: "12px" }}>
+              <Table sx={{ minWidth: 650, fontSize: "12px" }}>
                 <TableHead>
                   <TableRow>
                     <TableCell align="center" sx={headStyle}>User Email</TableCell>
@@ -99,33 +99,33 @@ export default function BookingDetails() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-  {bookings.map((booking) => (
-    <TableRow key={booking._id}>
-      <TableCell align="center" sx={bodyStyle}>{booking.userEmail}</TableCell>
-      <TableCell align="center" sx={bodyStyle}>{booking.movieName}</TableCell>
-      <TableCell align="center" sx={bodyStyle}>{booking.theaterName}</TableCell>
-      {!isMobile && (
-        <>
-          <TableCell align="center" sx={bodyStyle}>
-            {booking.seatNumbers ? booking.seatNumbers.join(", ") : "N/A"}
-          </TableCell>
-          <TableCell align="center" sx={bodyStyle}>
-            {new Date(booking.date).toLocaleDateString()}
-          </TableCell>
-          <TableCell align="center" sx={bodyStyle}>{booking.time}</TableCell>
-        </>
-      )}
-      <TableCell align="center" sx={bodyStyle}>{booking.location}</TableCell>
-      {!isMobile && (
-        <>
-          <TableCell align="center" sx={bodyStyle}>{booking.paymentStatus}</TableCell>
-          <TableCell align="center" sx={bodyStyle}>₹{booking.amount}</TableCell>
-          <TableCell align="center" sx={bodyStyle}>{booking.totalReservation}</TableCell>
-        </>
-      )}
-    </TableRow>
-  ))}
-</TableBody>
+                  {bookings.map((booking) => (
+                    <TableRow key={booking._id}>
+                      <TableCell align="center" sx={bodyStyle}>{booking.userEmail}</TableCell>
+                      <TableCell align="center" sx={bodyStyle}>{booking.movieName}</TableCell>
+                      <TableCell align="center" sx={bodyStyle}>{booking.theaterName}</TableCell>
+                      {!isMobile && (
+                        <>
+                          <TableCell align="center" sx={bodyStyle}>
+                            {booking.seatNumbers ? booking.seatNumbers.join(", ") : "N/A"}
+                          </TableCell>
+                          <TableCell align="center" sx={bodyStyle}>
+                            {new Date(booking.date).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell align="center" sx={bodyStyle}>{booking.time}</TableCell>
+                        </>
+                      )}
+                      <TableCell align="center" sx={bodyStyle}>{booking.location}</TableCell>
+                      {!isMobile && (
+                        <>
+                          <TableCell align="center" sx={bodyStyle}>{booking.paymentStatus}</TableCell>
+                          <TableCell align="center" sx={bodyStyle}>₹{booking.amount}</TableCell>
+                          <TableCell align="center" sx={bodyStyle}>{booking.totalReservation}</TableCell>
+                        </>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
             </TableContainer>
           </Grid>
