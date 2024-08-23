@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button, Typography, Container, Box, CircularProgress } from "@mui/material";
+import { TextField, Button, Typography, Container, Box, CircularProgress,IconButton, InputAdornment  } from "@mui/material";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
@@ -36,7 +37,15 @@ export default function login() {
   const navigate = useNavigate();
   const { mode } = useTheme();
   const [loading,setLoading]=useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const onSave = async (data) => {
     setLoading(true)
@@ -119,20 +128,39 @@ export default function login() {
               error={!!errors.email}
               helperText={errors.email ? errors.email.message : ""}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              {...register("password")}
-              error={!!errors.password}
-              helperText={errors.password ? errors.password.message : ""}
-            />
+           <TextField
+      variant="outlined"
+      margin="normal"
+      required
+      fullWidth
+      name="password"
+      label="Password"
+      type={showPassword ? "text" : "password"}
+      id="password"
+      autoComplete="current-password"
+      {...register("password")}
+      error={!!errors.password}
+      helperText={errors.password ? errors.password.message : ""}
+      sx={{
+        fontWeight: "bold",
+        fontSize: "1rem",
+        "@media (max-width: 600px)": { fontSize: "0.9rem" },
+      }}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
             <p style={{ textAlign: "center" }}>
               Don't have an account ?{" "}
               <Link to={"/signup"} style={styles}>
