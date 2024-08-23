@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button, Typography, Container, Box, CircularProgress } from "@mui/material";
+import { TextField, Button, Typography, Container, Box, CircularProgress, IconButton, InputAdornment,} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
@@ -22,10 +23,28 @@ const styles = {
 };
 
 const schema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  email: yup.string().email().required(),
-  password: yup.string().min(8).max(24).required(),
+  firstName: yup
+    .string()
+    .min(3, "First name must be at least 3 characters long")
+    .matches(
+      /^[a-zA-Z0-9]+$/,
+      "First name can only contain letters and numbers"
+    )
+    .required("First name is required"),
+  lastName: yup
+    .string()
+    .min(3, "Last name must be at least 3 characters long")
+    .matches(/^[a-zA-Z0-9]+$/, "Last name can only contain letters and numbers")
+    .required("Last name is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(24, "Password cannot be longer than 24 characters")
+    .required("Password is required"),
 });
 
 export default function Signup() {
@@ -40,6 +59,8 @@ export default function Signup() {
   const navigate = useNavigate();
   const { mode } = useTheme();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const onSave = async (data) => {
     setLoading(true);
@@ -62,6 +83,14 @@ export default function Signup() {
       setLoading(false);
       toast.error(error.response?.data?.message || "Something went wrong");
     }
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -159,12 +188,31 @@ export default function Signup() {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
             {...register("password")}
             error={!!errors.password}
             helperText={errors.password ? errors.password.message : ""}
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1rem",
+              "@media (max-width: 600px)": { fontSize: "0.9rem" },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <p style={{ textAlign: "center" }}>
             Already have an account ?{" "}
