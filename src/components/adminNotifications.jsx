@@ -1,5 +1,5 @@
 import React from "react";
-import { baseUrl } from "../../../user-if/src/basicurl/baseurl";
+import { baseUrl } from "../basicurl/baseurl";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Box, Grid, Stack, Typography, Button } from "@mui/material";

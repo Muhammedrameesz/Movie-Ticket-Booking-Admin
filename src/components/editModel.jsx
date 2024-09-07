@@ -31,7 +31,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: {xs:'80%',md:'60%'},  
   margin: "auto",
-  borderRadius: "10px",
   padding: { xs: "10px", md: "20px" }, 
   bgcolor: "background.paper",
   border: "2px solid #000",
