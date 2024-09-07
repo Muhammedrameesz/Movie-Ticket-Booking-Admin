@@ -1,12 +1,13 @@
 import React from "react";
-import { baseUrl } from "../basicurl/baseurl";
+import { baseUrl } from "../../../user-if/src/basicurl/baseurl";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Box, Grid, Stack, Typography, Button } from "@mui/material";
 import notFound from "../images/notFoundDark.jpg";
 import lNotFound from "../images/59563746_9318707.jpg";
 import { useTheme } from "../themes/themeContext.jsx";
-import { useCancellationContext } from "./contextAPI.jsx"
+import { useCancellationContext } from "./contextAPI.jsx";
+import { toast } from "react-toastify";
 
 export default function AdminNotifications() {
   const [cancelRequest, setCancelRequest] = useState([]);
@@ -22,26 +23,43 @@ export default function AdminNotifications() {
       console.log("Response data:", response.data);
       if (response.status === 200) {
         setCancelRequest(response.data);
-        updateLength(response.data.length); 
+        updateLength(response.data.length);
       }
     } catch (error) {
-      console.log("Error fetching cancel requests:", error.message); 
+      console.log("Error fetching cancel requests:", error.message);
     }
   };
-  
+
+  const cinfirmCancel = async (canceledOrderId) => {
+    try {
+      const response = await axios.put(`${baseUrl}/cancel/confirmCancel`, {
+        canceledOrderId,
+      });
+      if (response.status === 200) {
+        setTimeout(async () => {
+          toast.success("cancel request confirmed");
+          await getCancelRequests();
+        }, 2);
+      }
+    } catch (error) {
+      setTimeout(() => {
+        console.log(error);
+        toast.error(error.data.message);
+      }, 2);
+    }
+  };
 
   useEffect(() => {
     getCancelRequests();
     const intervalId = setInterval(() => {
       getCancelRequests();
     }, 30000);
-  
+
     return () => {
-      console.log("Cleaning up polling"); 
+      console.log("Cleaning up polling");
       clearInterval(intervalId);
     };
   }, []);
-  
 
   return (
     <>
@@ -62,7 +80,11 @@ export default function AdminNotifications() {
               }}
             >
               <Typography
-                sx={{ color: "#b81111", fontWeight: "bold", fontSize:{xs:'16px' ,md:"20px"}}}
+                sx={{
+                  color: "#b81111",
+                  fontWeight: "bold",
+                  fontSize: { xs: "16px", md: "20px" },
+                }}
               >
                 No cancelation request found
               </Typography>{" "}
@@ -152,6 +174,8 @@ export default function AdminNotifications() {
                       </Typography>
 
                       <Button
+                        onClick={() => cinfirmCancel(item._id)}
+                        disabled={item.status === "Cancellation confirmed"}
                         variant="contained"
                         color="primary"
                         sx={{
@@ -163,7 +187,9 @@ export default function AdminNotifications() {
                           },
                         }}
                       >
-                        Confirm Cancellation
+                        {item.status === "Cancel Requested"
+                          ? "Confirm Cancellation"
+                          : "This booking was canceled"}
                       </Button>
                     </Stack>
                   </Box>
