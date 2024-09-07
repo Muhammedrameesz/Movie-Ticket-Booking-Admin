@@ -18,6 +18,7 @@ import ProtectedRoute from "./utils/protectedRoutes.jsx";
 import AddTheater from "./pages/addTheater.jsx";
 import MyTheaterAndBookings from "./pages/myTheaterAndBookings.jsx";
 import AdminNotifications from "./pages/notifications.jsx"
+import { CancellationProvider } from "./components/contextAPI.jsx"
 
 
 const router = createBrowserRouter([
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <CancellationProvider>
     <ThemeProvider>
       <RouterProvider router={router} />
       <ToastContainer
@@ -93,5 +95,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         }}
       />
     </ThemeProvider>
+    </CancellationProvider>
   </React.StrictMode>
 );
