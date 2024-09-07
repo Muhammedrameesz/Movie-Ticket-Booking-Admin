@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../themes/themeContext.jsx';
-import {useMediaQuery } from '@mui/material';
+import {Badge, useMediaQuery } from '@mui/material';
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import { useCancellationContext } from "./contextAPI.jsx"
 
 const variants = {
   open: { x: 0 },
   closed: { x: '-100%' },
 };
 
-const SidebarItems = ({ mode }) => {
+
+const SidebarItems = ({ mode ,length }) => {
   const motionLinkStyles = {
     padding: '10px',
     backgroundColor: mode === 'dark' ? '#292727' : '#f5f5f5',
@@ -51,6 +54,20 @@ const SidebarItems = ({ mode }) => {
           My Theater & Bookings
         </motion.li>
       </Link>
+      <Link to="/owner/notifications" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <motion.li whileHover={{ scale: 1.1 }} style={motionLinkStyles}>
+          <Badge 
+          badgeContent={length} 
+          color="secondary"  
+          anchorOrigin={{
+            vertical: 'top',
+              horizontal: 'left',
+          }}>
+          <NotificationsActiveOutlinedIcon sx={{fontSize:'20px',mr:1}}/>
+          </Badge>
+          Notifications
+        </motion.li>
+      </Link>
     </ul>
   );
 };
@@ -59,7 +76,7 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const { mode } = useTheme();
   const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('md'));
-
+  const { length } = useCancellationContext();
 
   return (
     <div>
@@ -81,7 +98,7 @@ export default function Sidebar() {
             zIndex: 9,
           }}
         >
-          <SidebarItems mode={mode} />
+          <SidebarItems mode={mode} length ={length }/>
         </motion.nav>
       )}
       

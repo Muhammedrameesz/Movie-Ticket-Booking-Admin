@@ -17,6 +17,8 @@ import AdminLayout from "./layout/adminLayout.jsx";
 import ProtectedRoute from "./utils/protectedRoutes.jsx";
 import AddTheater from "./pages/addTheater.jsx";
 import MyTheaterAndBookings from "./pages/myTheaterAndBookings.jsx";
+import AdminNotifications from "./pages/notifications.jsx"
+
 
 const router = createBrowserRouter([
   {
@@ -68,6 +70,10 @@ const router = createBrowserRouter([
         path: "/owner/myTheaterAndBookings",
         element: <MyTheaterAndBookings />,
       },
+      {
+        path:"/owner/notifications",
+        element:<AdminNotifications/>
+      }
     ],
   },
 ]);
