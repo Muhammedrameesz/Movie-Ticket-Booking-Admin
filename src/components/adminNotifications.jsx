@@ -2,7 +2,14 @@ import React from "react";
 import { baseUrl } from "../basicurl/baseurl";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Box, Grid, Stack, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import notFound from "../images/notFoundDark.jpg";
 import lNotFound from "../images/59563746_9318707.jpg";
 import { useTheme } from "../themes/themeContext.jsx";
@@ -13,6 +20,7 @@ export default function AdminNotifications() {
   const [cancelRequest, setCancelRequest] = useState([]);
   const { mode } = useTheme();
   const { updateLength } = useCancellationContext();
+  const [loadingWithId, setLoadingWithId] = useState([]);
 
   const getCancelRequests = async () => {
     try {
@@ -20,7 +28,6 @@ export default function AdminNotifications() {
         `${baseUrl}/cancel/cancellationRequestForAdmin`,
         { withCredentials: true }
       );
-      console.log("Response data:", response.data);
       if (response.status === 200) {
         setCancelRequest(response.data);
         updateLength(response.data.length);
@@ -31,21 +38,26 @@ export default function AdminNotifications() {
   };
 
   const cinfirmCancel = async (canceledOrderId) => {
+    setLoadingWithId((prev) => [...prev, canceledOrderId]);
     try {
       const response = await axios.put(`${baseUrl}/cancel/confirmCancel`, {
         canceledOrderId,
       });
       if (response.status === 200) {
         setTimeout(async () => {
-          toast.success("cancel request confirmed");
+          toast.success("Cancel request confirmed");
           await getCancelRequests();
-        }, 2);
+          setLoadingWithId((prev) =>
+            prev.filter((id) => id !== canceledOrderId)
+          );
+        }, 2500);
       }
     } catch (error) {
       setTimeout(() => {
-        console.log(error);
-        toast.error(error.data.message);
-      }, 2);
+        console.error(error);
+        toast.error(error?.response?.data?.message || "An error occurred");
+        setLoadingWithId((prev) => prev.filter((id) => id !== canceledOrderId));
+      }, 2500);
     }
   };
 
@@ -60,6 +72,11 @@ export default function AdminNotifications() {
       clearInterval(intervalId);
     };
   }, []);
+
+  const typoStyle = {
+    fontSize: "14px",
+    color: mode === "dark" ? "#ececec" : "#181818",
+  };
 
   return (
     <>
@@ -124,7 +141,10 @@ export default function AdminNotifications() {
                       p: 2,
                       // backgroundColor: "#030303", // Dark gray background for contrast
                       borderRadius: 2,
-                      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.3)",
+                      boxShadow:
+                        mode === "dark"
+                          ? "0px 4px 12px rgba(0, 0, 0, 0.3)"
+                          : "0px 4px 12px rgba(0, 0, 0, 0.3)",
                       transition: "transform 0.3s ease",
                       display: "flex",
                       alignContent: "center",
@@ -135,9 +155,10 @@ export default function AdminNotifications() {
                     <Stack
                       spacing={1.5}
                       sx={{
-                        border: "1px solid #1a1a1a",
+                        // border: "1px solid #1a1a1a",
                         padding: "15px",
-                        backgroundColor: "#1d1d1d",
+                        backgroundColor:
+                          mode === "dark" ? "#1d1d1d" : "#dbdbdb",
                         borderRadius: "10px",
                       }}
                     >
@@ -149,48 +170,75 @@ export default function AdminNotifications() {
                           <strong>Order ID:</strong> {item.orderId}
                         </Typography>
                       </Stack>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={typoStyle}>
                         <strong>Movie Name:</strong> {item.movieName}
                       </Typography>
 
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={typoStyle}>
                         <strong>Seat Numbers:</strong> {item.seetNumbers}
                       </Typography>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={typoStyle}>
                         <strong>Theater Name:</strong> {item.theaterName}
                       </Typography>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={typoStyle}>
                         <strong>Total Reservation:</strong>{" "}
                         {item.totalResurvation}
                       </Typography>
-                      <Typography sx={{ fontSize: "14px" }}>
-                        <strong>Date:</strong> {item.date}
+                      <Typography sx={typoStyle}>
+                        <strong>Date:</strong>{" "}
+                        {new Date(item.date).toLocaleDateString()}
                       </Typography>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={typoStyle}>
                         <strong>Time:</strong> {item.time}
                       </Typography>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={typoStyle}>
                         <strong>Amount:</strong> {item.amout}
                       </Typography>
 
-                      <Button
-                        onClick={() => cinfirmCancel(item._id)}
-                        disabled={item.status === "Cancellation confirmed"}
-                        variant="contained"
-                        color="primary"
-                        sx={{
-                          mt: 2,
-                          backgroundColor: "#0caa0c",
-                          fontWeight: "bold",
-                          "&:hover": {
-                            backgroundColor: "#088a08",
-                          },
-                        }}
-                      >
-                        {item.status === "Cancel Requested"
-                          ? "Confirm Cancellation"
-                          : "This booking was canceled"}
-                      </Button>
+                      {loadingWithId.includes(item._id) ? (
+                        <Box
+                          sx={{
+                            position: "relative",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            mt: 2,
+                          }}
+                        >
+                          <CircularProgress
+                            size={18}
+                            sx={{
+                              color: mode === "dark" ? "#0caa0c" : "#630caa",
+                              position: "absolute",
+                              top: "50%",
+                              left: "50%",
+                              transform: "translate(-50%, -50%)", 
+                            }}
+                          />
+                        </Box>
+                      ) : (
+                        <Button
+                          onClick={() => cinfirmCancel(item._id)} 
+                          disabled={item.status === "Cancellation confirmed"}
+                          variant="contained"
+                          color="primary"
+                          sx={{
+                            mt: 2,
+                            backgroundColor:
+                              mode === "dark" ? "#0caa0c" : "#630caa",
+                            fontWeight: "bold",
+                            "&:hover": {
+                              backgroundColor:
+                                mode === "dark" ? "#0caa0c" : "#630caa", 
+                            },
+                            
+                          }}
+                        >
+                          {item.status === "Cancel Requested"
+                            ? "Confirm Cancellation"
+                            : "This booking was canceled"}
+                        </Button>
+                      )}
                     </Stack>
                   </Box>
                 </Grid>

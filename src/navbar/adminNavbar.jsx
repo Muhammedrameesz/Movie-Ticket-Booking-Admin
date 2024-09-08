@@ -62,6 +62,10 @@ export default function UserNavbar() {
     {
       path: "/owner/myTheaterAndBookings",
       value: "My Theater & Bookings",
+    },
+    {
+      path:"/owner/notifications",
+      value:"Notifications"
     }
     
   ];
