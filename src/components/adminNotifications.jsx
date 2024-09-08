@@ -45,7 +45,7 @@ export default function AdminNotifications() {
       });
       if (response.status === 200) {
         setTimeout(async () => {
-          toast.success("Cancel request confirmed");
+          toast.info("Confirm Cancellation Requested Successfully");
           await getCancelRequests();
           setLoadingWithId((prev) =>
             prev.filter((id) => id !== canceledOrderId)
@@ -235,8 +235,8 @@ export default function AdminNotifications() {
                           }}
                         >
                           {item.status === "Cancel Requested"
-                            ? "Confirm Cancellation"
-                            : "This booking was canceled"}
+                            ? "Send Confirm Cancellation Request"
+                            : "Confirm Cancellation Requested"}
                         </Button>
                       )}
                     </Stack>
