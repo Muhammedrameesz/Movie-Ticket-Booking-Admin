@@ -3,10 +3,11 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../themes/themeContext.jsx';
 import {Badge, useMediaQuery } from '@mui/material';
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import { useCancellationContext } from "./contextAPI.jsx"
 import axios from 'axios';
 import { baseUrl } from '../basicurl/baseurl';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+
 
 const variants = {
   open: { x: 0 },
@@ -61,7 +62,7 @@ const SidebarItems = ({ mode ,length ,role}) => {
             vertical: 'top',
               horizontal: 'left',
           }}>
-          <NotificationsActiveOutlinedIcon sx={{fontSize:'20px',mr:1}}/>
+          <NotificationsNoneOutlinedIcon sx={{fontSize:'20px',mr:1}}/>
           </Badge>
           Notifications
         </motion.li>

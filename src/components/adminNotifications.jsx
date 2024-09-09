@@ -1,252 +1,336 @@
-import React from "react";
-import { baseUrl } from "../basicurl/baseurl";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Grid,
-  Stack,
-  Typography,
-  Button,
-  CircularProgress,
-} from "@mui/material";
-import notFound from "../images/notFoundDark.jpg";
-import lNotFound from "../images/59563746_9318707.jpg";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import ThemeToggler from "../themes/themeToggler.jsx";
 import { useTheme } from "../themes/themeContext.jsx";
-import { useCancellationContext } from "./contextAPI.jsx";
+import MovieImage from "../images/Movies.png";
+import {
+  Button,
+  Grid,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  Tooltip,
+  tooltipClasses,
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import useAuthStore from "../authStore/authStore";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { baseUrl } from "../basicurl/baseurl";
 
-export default function AdminNotifications() {
-  const [cancelRequest, setCancelRequest] = useState([]);
+
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.black,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+  },
+}));
+
+export default function UserNavbar() {
+  const { logout } = useAuthStore();
   const { mode } = useTheme();
-  const { updateLength } = useCancellationContext();
-  const [loadingWithId, setLoadingWithId] = useState([]);
-
-  const getCancelRequests = async () => {
-    try {
-      const response = await axios.get(
-        `${baseUrl}/cancel/cancellationRequestForAdmin`,
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        setCancelRequest(response.data);
-        updateLength(response.data.length);
-      }
-    } catch (error) {
-      console.log("Error fetching cancel requests:", error.message);
-    }
-  };
-
-  const cinfirmCancel = async (canceledOrderId) => {
-    setLoadingWithId((prev) => [...prev, canceledOrderId]);
-    try {
-      const response = await axios.put(`${baseUrl}/cancel/confirmCancel`, {
-        canceledOrderId,
-      });
-      if (response.status === 200) {
-        setTimeout(async () => {
-          toast.info("Confirm Cancellation Requested Successfully");
-          await getCancelRequests();
-          setLoadingWithId((prev) =>
-            prev.filter((id) => id !== canceledOrderId)
-          );
-        }, 2500);
-      }
-    } catch (error) {
-      setTimeout(() => {
-        console.error(error);
-        toast.error(error?.response?.data?.message || "An error occurred");
-        setLoadingWithId((prev) => prev.filter((id) => id !== canceledOrderId));
-      }, 2500);
-    }
-  };
+  const textColor = mode === "dark" ? "#fff" : "#000000";
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [role,setRole]=useState("")
 
   useEffect(() => {
-    getCancelRequests();
-    const intervalId = setInterval(() => {
-      getCancelRequests();
-    }, 30000);
-
-    return () => {
-      console.log("Cleaning up polling");
-      clearInterval(intervalId);
+    const fetchRole = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/admins/roleCheck`, { withCredentials: true });
+        if (response.status === 200) {
+          console.log("Fetched Role:", response.data.data);  
+          setRole(response.data.data);  
+        }
+      } catch (error) {
+        console.error("Error fetching role:", error);
+      }
     };
-  }, []);
+    fetchRole();
+  }, []);  
 
-  const typoStyle = {
-    fontSize: "14px",
-    color: mode === "dark" ? "#ececec" : "#181818",
+  const navLinks = [
+    {
+      path: "/admin/dashboard",
+      value: "Home",
+    },
+    {
+      path: "/admin/allMovies",
+      value: "Movies",
+    },
+    {
+      path: "/admin/movies/add",
+      value: "Add Movies",
+    },
+    {
+      path: "/owner/theaters/add",
+      value: "Add Theaters",
+    },
+    {
+      path: "/owner/myTheaterAndBookings",
+      value: "My Theater & Bookings",
+    },
+      {
+        path:"/owner/notifications",
+        value:"Notifications"
+    },
+    {
+      path: "/admin/bookings",
+      value: "Booking Details",
+    },
+    {
+      path:"/owners/allOwners",
+      value:"Owners List"
+    }
+    
+  ];
+
+  const filteredNavLinks = navLinks.filter(link => {
+    if (role === "owner" && (link.value === "Booking Details" || link.value === "Owners List")) {
+      return false; 
+    }
+    return true; 
+  });
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    toast.success("Successfully logged out");
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          color: "#cfcfcf",
-          p: 2,
-          ml: { xs: 1, sm: 2, md: 30, lg: 33 },
+    <div>
+      <nav
+        style={{
+          backgroundColor: mode === "dark" ? "black" : "#eee3ec",
+          color: mode === "dark" ? "#fff" : "#000",
+          padding: "20px",
+          width: "100%",
+          boxSizing: "border-box",
+          boxShadow: "0px 0px 10px 0px rgba(241, 235, 235, 0.75)",
         }}
       >
-        {cancelRequest.length === 0 ? (
-          <>
-            <Stack
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item xs={6} sm={4} container alignItems="center">
+            <Link
+              to="/"
+              style={{ display: "flex", alignItems: "center",   }}
             >
-              <Typography
+              <Box
                 sx={{
-                  color: "#b81111",
-                  fontWeight: "bold",
-                  fontSize: { xs: "16px", md: "20px" },
+                  height: "50px",
+                  cursor: "pointer",
+                  marginLeft:{xs:3,md:2}
                 }}
               >
-                No cancelation request found
-              </Typography>{" "}
-              <br />
-              <img
-                src={mode === "dark" ? notFound : lNotFound}
-                alt="notfound"
-                style={{
-                  maxWidth: "30%",
-                  height: "auto",
-                  borderRadius: "20px",
+                <img
+                  src={MovieImage}
+                  alt="movie-icon-image"
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </Box>
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  display: { xs: "none", sm: "block" }, 
+                  fontWeight: "bold",
+                  marginLeft: "15px",
+                  marginTop: "8px",
+                  cursor: "pointer",
+                  color: textColor,
+                  textDecoration: "none",
+                  fontSize: "20px",
+                  letterSpacing: "1px",
+                  textShadow:
+                    mode === "light"
+                      ? "2px 2px 5px rgba(0, 0, 0, 0.5)"
+                      : "2px 2px 5px rgb(180, 180, 180)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  wordWrap: "break-word",
+                  fontFamily: "Poppins, sans-serif",
                 }}
-              />
-            </Stack>
-          </>
-        ) : (
-          <>
-            <Typography
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                mb: 4,
-                fontWeight: "bold",
-                color: "#8d65cc",
-                textDecoration: "underline",
-                fontSize: { xs: "1.2rem", md: "1.8rem" },
+              >
+                Popcorn Movies
+              </Typography>
+            </Link>
+          </Grid>
+
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            container
+            alignItems="center"
+            justifyContent="center"
+            sx={{ display: { xs: "none", sm: "flex" } }}
+          >
+            <Link
+              to={"/admin/dashboard"}
+              style={{
+                textDecoration: "none",
+                color: textColor,
+                padding: "0 15px",
               }}
             >
-              Booking Cancelation Requests
-            </Typography>
+              <BootstrapTooltip title="Home">
+                <HomeIcon
+                  sx={{
+                    background: `linear-gradient(135deg, ${
+                      mode === "light" ? "#10d8b7" : "#d62222"
+                    } 0%, ${mode === "light" ? "#948888" : "#444141"} 100%)`,
+                    color: mode === "dark" ? "#bdaeae" : "#474444",
+                    padding: "4px",
+                    borderRadius: "50%",
+                    width: "30px",
+                    height: "30px",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease-in-out",
+                    boxShadow: `0px 4px 8px ${
+                      mode === "light"
+                        ? "rgba(0, 0, 0, 0.2)"
+                        : "rgba(0, 0, 0, 0.5)"
+                    }`,
+                    "&:hover": {
+                      background: `linear-gradient(135deg, ${
+                        mode === "light" ? "#10d8b7" : "#d62222"
+                      } 0%, ${mode === "light" ? "#948888" : "#444141"} 100%)`,
+                      transform: "scale(1.1)",
+                    },
+                  }}
+                />
+              </BootstrapTooltip>
+            </Link>
+          </Grid>
 
-            <Grid container spacing={5}>
-              {cancelRequest.map((item) => (
-                <Grid item xs={12} sm={6} md={4} key={item._id}>
-                  <Box
-                    sx={{
-                      p: 2,
-                      // backgroundColor: "#030303", // Dark gray background for contrast
-                      borderRadius: 2,
-                      boxShadow:
-                        mode === "dark"
-                          ? "0px 4px 12px rgba(0, 0, 0, 0.3)"
-                          : "0px 4px 12px rgba(0, 0, 0, 0.3)",
-                      transition: "transform 0.3s ease",
-                      display: "flex",
-                      alignContent: "center",
-                      justifyContent: "center",
-                      "&:hover": { transform: "scale(1.02)" },
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            sx={{
+              display: { xs: "flex", sm: "none" },
+              justifyContent: "flex-end",
+            }}
+          >
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenuClick}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={open}
+              onClose={handleMenuClose}
+            >
+              {filteredNavLinks.map((link, index) => (
+                <MenuItem key={index} onClick={handleMenuClose}>
+                  <Link
+                    to={link.path}
+                    style={{
+                      textDecoration: "none",
+                      color: textColor,
+                      width: "100%",
                     }}
                   >
-                    <Stack
-                      spacing={1.5}
-                      sx={{
-                        // border: "1px solid #1a1a1a",
-                        padding: "15px",
-                        backgroundColor:
-                          mode === "dark" ? "#1d1d1d" : "#dbdbdb",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <Stack>
-                        <Typography sx={{ fontSize: "14px", color: "#1820bd" }}>
-                          <strong>User ID:</strong> {item.userId}
-                        </Typography>
-                        <Typography sx={{ fontSize: "14px", color: "#1820bd" }}>
-                          <strong>Order ID:</strong> {item.orderId}
-                        </Typography>
-                      </Stack>
-                      <Typography sx={typoStyle}>
-                        <strong>Movie Name:</strong> {item.movieName}
-                      </Typography>
-
-                      <Typography sx={typoStyle}>
-                        <strong>Seat Numbers:</strong> {item.seetNumbers}
-                      </Typography>
-                      <Typography sx={typoStyle}>
-                        <strong>Theater Name:</strong> {item.theaterName}
-                      </Typography>
-                      <Typography sx={typoStyle}>
-                        <strong>Total Reservation:</strong>{" "}
-                        {item.totalResurvation}
-                      </Typography>
-                      <Typography sx={typoStyle}>
-                        <strong>Date:</strong>{" "}
-                        {new Date(item.date).toLocaleDateString()}
-                      </Typography>
-                      <Typography sx={typoStyle}>
-                        <strong>Time:</strong> {item.time}
-                      </Typography>
-                      <Typography sx={typoStyle}>
-                        <strong>Amount:</strong> {item.amount}
-                      </Typography>
-
-                      {loadingWithId.includes(item._id) ? (
-                        <Box
-                          sx={{
-                            position: "relative",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            mt: 2,
-                          }}
-                        >
-                          <CircularProgress
-                            size={18}
-                            sx={{
-                              color: mode === "dark" ? "#0caa0c" : "#630caa",
-                              position: "absolute",
-                              top: "50%",
-                              left: "50%",
-                              transform: "translate(-50%, -50%)", 
-                            }}
-                          />
-                        </Box>
-                      ) : (
-                        <Button
-                          onClick={() => cinfirmCancel(item._id)} 
-                          disabled={item.status === "Cancellation confirmed"}
-                          variant="contained"
-                          color="primary"
-                          sx={{
-                            mt: 2,
-                            backgroundColor:
-                              mode === "dark" ? "#0caa0c" : "#630caa",
-                            fontWeight: "bold",
-                            "&:hover": {
-                              backgroundColor:
-                                mode === "dark" ? "#0caa0c" : "#630caa", 
-                            },
-                            
-                          }}
-                        >
-                          {item.status === "Cancel Requested"
-                            ? "Send Confirm Cancellation Request"
-                            : "Confirm Cancellation Requested"}
-                        </Button>
-                      )}
-                    </Stack>
-                  </Box>
-                </Grid>
+                    {link.value}
+                  </Link>
+                </MenuItem>
               ))}
-            </Grid>
-          </>
-        )}
-      </Box>
-    </>
+              <MenuItem onClick={handleMenuClose}>
+                <ThemeToggler />
+              </MenuItem>
+              <MenuItem onClick={handleMenuClose}>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    color: "#fff",
+                    backgroundColor: "#a51237",
+                    fontWeight: "bold",
+                    border: mode === "dark" ? "1px solid black" : "#fff",
+                    textTransform: "none",
+                    transition: "all 0.5s ease",
+                    "&:hover": {
+                      backgroundColor: "#a51237",
+                      fontWeight: "bold",
+                      border: mode === "dark" ? "1px solid black" : "#fff",
+                      transform: "scale(1.04)",
+                    },
+                  }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </MenuItem>
+            </Menu>
+          </Grid>
+
+          <Grid
+            item
+            xs={0}
+            sm={4}
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <ThemeToggler />
+            <Button
+              variant="outlined"
+              sx={{
+                color: "#fff",
+                backgroundColor: "#a51237",
+                fontWeight: "bold",
+                border: mode === "dark" ? "1px solid black" : "#fff",
+                textTransform: "none",
+                marginLeft: "20px",
+                transition: "all 0.5s ease",
+                "&:hover": {
+                  backgroundColor: "#a51237",
+                  fontWeight: "bold",
+                  border: mode === "dark" ? "1px solid black" : "#fff",
+                  transform: "scale(1.04)",
+                },
+              }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
+      </nav>
+    </div>
   );
 }
