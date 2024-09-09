@@ -192,7 +192,7 @@ export default function AdminNotifications() {
                         <strong>Time:</strong> {item.time}
                       </Typography>
                       <Typography sx={typoStyle}>
-                        <strong>Amount:</strong> {item.amout}
+                        <strong>Amount:</strong> {item.amount}
                       </Typography>
 
                       {loadingWithId.includes(item._id) ? (

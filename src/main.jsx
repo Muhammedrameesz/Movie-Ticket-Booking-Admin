@@ -19,6 +19,7 @@ import AddTheater from "./pages/addTheater.jsx";
 import MyTheaterAndBookings from "./pages/myTheaterAndBookings.jsx";
 import AdminNotifications from "./pages/notifications.jsx"
 import { CancellationProvider } from "./components/contextAPI.jsx"
+import AllOwners from "./pages/allOwners.jsx"
 
 
 const router = createBrowserRouter([
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path:"/owner/notifications",
         element:<AdminNotifications/>
+      },
+      {
+        path:'/owners/allOwners',
+        element:<AllOwners/>
       }
     ],
   },

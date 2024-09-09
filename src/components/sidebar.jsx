@@ -68,6 +68,11 @@ const SidebarItems = ({ mode ,length }) => {
           Notifications
         </motion.li>
       </Link>
+      <Link to="/owners/allOwners" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <motion.li whileHover={{ scale: 1.1 }} style={motionLinkStyles}>
+          Owners List
+        </motion.li>
+      </Link>
     </ul>
   );
 };
