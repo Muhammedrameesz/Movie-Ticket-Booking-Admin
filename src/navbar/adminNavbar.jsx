@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import ThemeToggler from "../themes/themeToggler.jsx";
@@ -19,6 +19,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import useAuthStore from "../authStore/authStore";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { baseUrl } from "../basicurl/baseurl";
+
 
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -37,6 +40,22 @@ export default function UserNavbar() {
   const textColor = mode === "dark" ? "#fff" : "#000000";
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [role,setRole]=useState("")
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/admins/roleCheck`, { withCredentials: true });
+        if (response.status === 200) {
+          console.log("Fetched Role:", response.data.data);  
+          setRole(response.data.data);  
+        }
+      } catch (error) {
+        console.error("Error fetching role:", error);
+      }
+    };
+    fetchRole();
+  }, []);  
 
   const navLinks = [
     {
@@ -56,19 +75,30 @@ export default function UserNavbar() {
       value: "Add Theaters",
     },
     {
+      path: "/owner/myTheaterAndBookings",
+      value: "My Theater & Bookings",
+    },
+      {
+        path:"/owner/notifications",
+        value:"Notifications"
+    },
+    {
       path: "/admin/bookings",
       value: "Booking Details",
     },
     {
-      path: "/owner/myTheaterAndBookings",
-      value: "My Theater & Bookings",
-    },
-    {
-      path:"/owner/notifications",
-      value:"Notifications"
+      path:"/owners/allOwners",
+      value:"Owners List"
     }
     
   ];
+
+  const filteredNavLinks = navLinks.filter(link => {
+    if (role === "owner" && (link.value === "Booking Details" || link.value === "Owners List")) {
+      return false; 
+    }
+    return true; 
+  });
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -118,7 +148,7 @@ export default function UserNavbar() {
                 variant="h6"
                 noWrap
                 sx={{
-                  display: { xs: "none", sm: "block" }, // Hide on small screens
+                  display: { xs: "none", sm: "block" }, 
                   fontWeight: "bold",
                   marginLeft: "15px",
                   marginTop: "8px",
@@ -224,7 +254,7 @@ export default function UserNavbar() {
               open={open}
               onClose={handleMenuClose}
             >
-              {navLinks.map((link, index) => (
+              {filteredNavLinks.map((link, index) => (
                 <MenuItem key={index} onClick={handleMenuClose}>
                   <Link
                     to={link.path}
