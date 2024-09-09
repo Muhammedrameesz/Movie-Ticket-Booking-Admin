@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../themes/themeContext.jsx';
 import {Badge, useMediaQuery } from '@mui/material';
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import { useCancellationContext } from "./contextAPI.jsx"
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import axios from 'axios';
+import { baseUrl } from '../basicurl/baseurl';
 
 const variants = {
   open: { x: 0 },
@@ -12,7 +14,7 @@ const variants = {
 };
 
 
-const SidebarItems = ({ mode ,length }) => {
+const SidebarItems = ({ mode ,length ,role}) => {
   const motionLinkStyles = {
     padding: '10px',
     backgroundColor: mode === 'dark' ? '#292727' : '#f5f5f5',
@@ -44,11 +46,7 @@ const SidebarItems = ({ mode ,length }) => {
           Add Theater
         </motion.li>
       </Link>
-      <Link to="/admin/bookings" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <motion.li whileHover={{ scale: 1.1 }} style={motionLinkStyles}>
-          Booking Details
-        </motion.li>
-      </Link>
+      
       <Link to="/owner/myTheaterAndBookings" style={{ textDecoration: 'none', color: 'inherit' }}>
         <motion.li whileHover={{ scale: 1.1 }} style={motionLinkStyles}>
           My Theater & Bookings
@@ -63,12 +61,17 @@ const SidebarItems = ({ mode ,length }) => {
             vertical: 'top',
               horizontal: 'left',
           }}>
-          <NotificationsNoneOutlinedIcon sx={{fontSize:'20px',mr:1}}/>
+          <NotificationsActiveOutlinedIcon sx={{fontSize:'20px',mr:1}}/>
           </Badge>
           Notifications
         </motion.li>
       </Link>
-      <Link to="/owners/allOwners" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to="/admin/bookings" style={{ textDecoration: 'none', color: 'inherit',display:role==="admin"?'block':'none' }}>
+        <motion.li whileHover={{ scale: 1.1 }} style={motionLinkStyles}>
+          Booking Details
+        </motion.li>
+      </Link>
+      <Link to="/owners/allOwners" style={{ textDecoration: 'none', color: 'inherit',display:role==="admin"?'block':'none' }}>
         <motion.li whileHover={{ scale: 1.1 }} style={motionLinkStyles}>
           Owners List
         </motion.li>
@@ -76,12 +79,27 @@ const SidebarItems = ({ mode ,length }) => {
     </ul>
   );
 };
-
+// /owners/allOwners
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const { mode } = useTheme();
+  const [role,setRole]=useState("")
   const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('md'));
   const { length } = useCancellationContext();
+
+  useEffect(()=>{
+    const fetchRole = async()=>{
+      try {
+        const response = await axios.get(`${baseUrl}/admins/roleCheck`,{withCredentials:true})
+        if(response.status===200){
+          setRole(response.data.data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchRole()
+  },[])
 
   return (
     <div>
@@ -103,7 +121,7 @@ export default function Sidebar() {
             zIndex: 9,
           }}
         >
-          <SidebarItems mode={mode} length ={length }/>
+          <SidebarItems mode={mode} length ={length } role={role}/>
         </motion.nav>
       )}
       
