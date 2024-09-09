@@ -3,7 +3,6 @@ import { baseUrl } from "../basicurl/baseurl";
 import axios from "axios";
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from "@mui/material";
 import { useTheme } from '../themes/themeContext.jsx'; 
-import AllOwners from "./pages/allOwners.jsx"
 
 
 
